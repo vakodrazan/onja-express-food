@@ -97,3 +97,7 @@ button.served:hover {
 	background-color: hsl(8, 85%, 50%);
 	color: white;
 }
+
+img {
+	max-width: 100%;
+}
