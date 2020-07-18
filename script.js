@@ -1,11 +1,14 @@
 const addListBtn = document.querySelector('.add-order');
 const innerModal = document.querySelector('.inner-modal');
 const outerModal = document.querySelector('.outer-modal');
+const detail = document.querySelector(".details")
+const deleteOrder = document.querySelector('.served')
+const order = document.querySelector(".order")
 
 
 const handleAddListBtn = (e) => {
     const myFormHtml = `
-        <form>
+        <form >
             <p>Your name :</p>
             <input
                 class="input-form"
@@ -48,7 +51,30 @@ const handleAddListBtn = (e) => {
     `;
 
     innerModal.innerHTML = myFormHtml;
-    outerModal.classList.add('open')
+    outerModal.classList.add('open');
+}
+
+const submitForm = (e) => {
+    const form = e.currentTarget.closest('form');
+
+    const userName = form.querySelector('[name="name"]');
+    const dish = form.querySelector('[name="dish"]');
+    const size = form.querySelector('[name="size"]');
+    const amount = form.querySelector('[name="amount"]');
+
+    form.addEventListener('submit', e => {
+        e.preventDefault();
+        innerModal.innerHTML = `
+            <h1>${userName.value}</h1>
+            <h2>Order: </h2>
+            <p>${amount.value} ${size.value} ${dish.value}.</p>
+            <img src="./images/bon-appetit.jpg" alt='${size.value}' />
+
+        `;
+        outerModal.classList.add('open');
+    });
+
+    form.reset();
 }
 
 outerModal.addEventListener('click', event => {
@@ -58,10 +84,38 @@ outerModal.addEventListener('click', event => {
     }
 });
 
+
+
 window.addEventListener('keydown', (event) => {
     if (event.key === 'Escape') {
         outerModal.classList.remove('open');
     }
 });
 
+const handleDetail = (e) => {
+    const detail = e.currentTarget.closest('.order');
+
+    const userName = detail.querySelector('.title').textContent;
+    const dish = detail.dataset.dish;
+    const size = detail.dataset.size;
+    const amount = detail.dataset.amount;
+
+    innerModal.innerHTML =`
+    <h1>${userName}</h1>
+    <h2>Order: </h2>
+    <p>${amount} ${size} ${dish}.</p>
+    
+    <img src="./images/bon-appetit.jpg" alt="${dish}">
+    `;
+
+    outerModal.classList.add('open');
+}
+
+const handleDeleteBtn = () => {
+    order.classList.add('hidden')
+}
+
+deleteOrder.addEventListener('click', handleDeleteBtn);
+detail.addEventListener('click', handleDetail);
 addListBtn.addEventListener('click', handleAddListBtn);
+window.addEventListener('click', submitForm)
