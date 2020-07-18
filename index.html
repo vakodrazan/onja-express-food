@@ -5,6 +5,33 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Onja Express</title>
 		<link rel="stylesheet" href="style.css" />
+		<style>
+			.outer-modal {
+				display: grid;
+				place-items: center center;
+				background-color: hsla(0, 0%, 0%, 0.7);
+				pointer-events: none;
+				opacity: 0;
+				position: fixed;
+
+				top: 0;
+				left: 0;
+				height: 100vh;
+				width: 100vw;
+			}
+
+			.outer-modal.open {
+				opacity: 1;
+				pointer-events: all;
+			}
+
+			.inner-modal {
+				background-color: white;
+				min-height: 400px;
+				min-width: 400px;
+				padding: 20px;
+			}
+		</style>
 	</head>
 	<body>
 		<div class="header"></div>
@@ -23,6 +50,10 @@
 			</div>
 
 			<button class="add-order">Add a new order</button>
+		</div>
+
+		<div class="outer-modal">
+			<div class="inner-modal"></div>
 		</div>
 		<script src="./script.js"></script>
 	</body>
