@@ -7,10 +7,11 @@ const order = document.querySelector(".order");
 const orderList = document.querySelector('.order-list');
 
 
+
 // Create a funtion that contains the form element
 const handleAddListBtn = (e) => {
     const myFormHtml = `
-        <form class="form">
+        <form>
             <p>Your name :</p>
             <input
                 class="input-form"
@@ -99,29 +100,27 @@ detail.addEventListener('click', handleDetail);
 addListBtn.addEventListener('click', handleAddListBtn);
 
 //create an event delegation for the inner button
-window.addEventListener('click', (e) => {
-    const submitButton = e.target.matches("button.submitOrder");
-    const userName = document.querySelector('[name="name"]');
-    const dish = document.querySelector('[name="dish"]');
-    const size = document.querySelector('[name="size"]');
-    const amount = document.querySelector('[name="amount"]');
-
-    if (submitButton) {
-        submitButton.addEventListener('click', e => {
-            e.preventDefault();
-            const myHtml = `
-            <div class="order" data-dish="${dish.value}" data-size="${size.value}" data-amount="${amount.value}">
+window.addEventListener('submit', event => {
+    event.preventDefault();
+    const formInput = event.target;
+    const userName = formInput.name.value;
+    const dish = formInput.dish.value;
+    const size = formInput.size.value;
+    const amount = formInput.amount.value;
+    // when clicking the submit button
+    if (formInput.matches("form")) {
+        const myHtml = `
+            <div class="order" data-dish="${dish}" data-size="${size}" data-amount="${amount}">
                 <span class="title">
-                    ${userName.value}
+                    ${userName}
                 </span>
                 <button class="details">Details</button>
                 <button class="served">Delete order</button>
             </div>
         `;
-        orderList.insertAdjacentHTML('afterbegin', myHtml)
-        })
-        
+        orderList.insertAdjacentHTML('beforeend', myHtml);
     }
+    
 
     // if (e.target.matches("button.details")) {
 
