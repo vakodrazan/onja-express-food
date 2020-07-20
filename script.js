@@ -98,4 +98,12 @@ window.addEventListener('submit', event => {
         // append child with the order list
         orderList.insertAdjacentHTML('beforeend', myHtml);
     }
+
+    // listen to the detail button to show the result
+
+    if (formInput.matches('button.detail')) {
+        console.log("hello")
+    }
+
+    // delete the order
 });
