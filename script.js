@@ -57,6 +57,7 @@ const handleAddListBtn = (e) => {
     outerModal.classList.add('open');
 }
 
+// Listen to the outside of the element to close the modal
 outerModal.addEventListener('click', event => {
     const isOutside = !event.target.closest('.inner-modal')
     if (isOutside) {
@@ -65,38 +66,13 @@ outerModal.addEventListener('click', event => {
 });
 
 
-
+// listen to the escape key to close the modal
 window.addEventListener('keydown', (event) => {
     if (event.key === 'Escape') {
         outerModal.classList.remove('open');
     }
 });
 
-const handleDetail = (e) => {
-    const detail = e.currentTarget.closest('.order');
-
-    const userName = detail.querySelector('.title').textContent;
-    const dish = detail.dataset.dish;
-    const size = detail.dataset.size;
-    const amount = detail.dataset.amount;
-
-    innerModal.innerHTML =`
-    <h1>${userName}</h1>
-    <h2>Order: </h2>
-    <p>${amount} ${size} ${dish}.</p>
-    
-    <img src="./images/bon-appetit.jpg" alt="${dish}">
-    `;
-
-    outerModal.classList.add('open');
-}
-
-const handleDeleteBtn = () => {
-    order.classList.add('hidden')
-}
-
-deleteOrder.addEventListener('click', handleDeleteBtn);
-detail.addEventListener('click', handleDetail);
 addListBtn.addEventListener('click', handleAddListBtn);
 
 //create an event delegation for the inner button
@@ -107,7 +83,8 @@ window.addEventListener('submit', event => {
     const dish = formInput.dish.value;
     const size = formInput.size.value;
     const amount = formInput.amount.value;
-    // when clicking the submit button
+
+    // when clicking the submit button listen for all the element inside of form
     if (formInput.matches("form")) {
         const myHtml = `
             <div class="order" data-dish="${dish}" data-size="${size}" data-amount="${amount}">
@@ -118,14 +95,7 @@ window.addEventListener('submit', event => {
                 <button class="served">Delete order</button>
             </div>
         `;
+        // append child with the order list
         orderList.insertAdjacentHTML('beforeend', myHtml);
     }
-    
-
-    // if (e.target.matches("button.details")) {
-
-    // }
-    // if (e.target.matches("button.served")) {
-
-    // }
 });
