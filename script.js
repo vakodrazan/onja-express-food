@@ -2,8 +2,6 @@ const addListBtn = document.querySelector('.add-order');
 const innerModal = document.querySelector('.inner-modal');
 const outerModal = document.querySelector('.outer-modal');
 const detail = document.querySelector(".details");
-const deleteOrder = document.querySelector('.served');
-const order = document.querySelector(".order");
 const orderList = document.querySelector('.order-list');
 
 
@@ -57,11 +55,15 @@ const handleAddListBtn = (e) => {
     outerModal.classList.add('open');
 }
 
+const closeModal = () => {
+    outerModal.classList.remove('open');
+}
+
 // Listen to the outside of the element to close the modal
 outerModal.addEventListener('click', event => {
     const isOutside = !event.target.closest('.inner-modal')
     if (isOutside) {
-        outerModal.classList.remove('open');
+        closeModal();
     }
 });
 
@@ -69,27 +71,22 @@ outerModal.addEventListener('click', event => {
 // listen to the escape key to close the modal
 window.addEventListener('keydown', (event) => {
     if (event.key === 'Escape') {
-        outerModal.classList.remove('open');
+        closeModal();
     }
 });
 
-addListBtn.addEventListener('click', handleAddListBtn);
-
-//create an event delegation for the inner button
-window.addEventListener('submit', event => {
+const handleSubmit = event => {
     event.preventDefault();
-    const formInput = event.target;
-    const userName = formInput.name.value;
-    const dish = formInput.dish.value;
-    const size = formInput.size.value;
-    const amount = formInput.amount.value;
-
     // when clicking the submit button listen for all the element inside of form
-    if (formInput.matches("form")) {
+    if (event.target.matches("form")) {
+        const formInput = event.target;
+
+        const {dish, size, amount, name} = formInput;
+
         const myHtml = `
-            <div class="order" data-dish="${dish}" data-size="${size}" data-amount="${amount}">
+            <div class="order" data-dish="${dish.value}" data-size="${size.value}" data-amount="${amount.value}">
                 <span class="title">
-                    ${userName}
+                    ${name.value}
                 </span>
                 <button class="details">Details</button>
                 <button class="served">Delete order</button>
@@ -97,13 +94,46 @@ window.addEventListener('submit', event => {
         `;
         // append child with the order list
         orderList.insertAdjacentHTML('beforeend', myHtml);
+        closeModal();
+        formInput.reset();
     }
 
     // listen to the detail button to show the result
 
-    if (formInput.matches('button.detail')) {
-        console.log("hello")
-    }
+}
 
-    // delete the order
-});
+const showDetailModal = (order) => {
+    const {dish, size, amount} = order.dataset;
+    const name = order.querySelector('.title').textContent;
+
+    const detailHtml = `
+    <h4>${name}</h4>
+    <h5>Order: </h5>
+    <p>${amount} ${size} ${dish}</p>
+    <img src="./images/${dish}.jpg"/>
+    `;
+
+    innerModal.innerHTML = detailHtml;
+    outerModal.classList.add('open')
+}
+
+const deleteOrder = (orderDelete) => {
+    orderDelete.parentElement.remove();
+}
+
+const handleBtnClick = event => {
+    if(event.target.matches('button.details')) {
+        const order = event.target.closest('.order');
+        showDetailModal(order);
+    }
+    if (event.target.matches("button.served")) {
+        const orderDelete = event.target.closest('.served');
+        deleteOrder(orderDelete);
+    }
+}
+
+window.addEventListener('click', handleBtnClick);
+addListBtn.addEventListener('click', handleAddListBtn);
+//create an event delegation for the inner button
+window.addEventListener('submit', handleSubmit);
+
